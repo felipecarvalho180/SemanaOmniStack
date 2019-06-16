@@ -1,0 +1,15 @@
+header#main-header {
+  height: 72px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+header#main-header .header-content {
+  max-width: 980px;
+  margin: 0 auto;
+  height: 72px;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
