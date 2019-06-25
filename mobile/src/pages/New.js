@@ -14,10 +14,12 @@ export default class New extends Component {
     this.state = {
       image: null,
       preview: null,
-      author: '',
-      place: '',
-      description: '',
-      hashtags: '',
+      post: {
+        author: '',
+        place: '',
+        description: '',
+        hashtags: '',
+      }
     }
   }
 
@@ -37,7 +39,6 @@ export default class New extends Component {
 
         let prefix;
         let ext;
-        debugger
         if(upload) {
           [prefix, ext] = upload.fileName.split('.');
           ext = ext.toLowerCase() === 'heic' ? 'jpg' : ext;
@@ -62,15 +63,25 @@ export default class New extends Component {
     })
   }
 
+  handleTextInput = (name, value) => {
+    this.setState((state) => ({
+      ...state,
+      post: {
+        ...state.post,
+        [name]: value
+      }
+    }))
+  }
+
   handleSubmit = async () => {
 
     const data = new FormData();
 
     data.append('image', this.state.image);
-    data.append('author', this.state.author);
-    data.append('place', this.state.place);
-    data.append('description', this.state.description);
-    data.append('hashtags', this.state.hashtags);
+    data.append('author', this.state.post.author);
+    data.append('place', this.state.post.place);
+    data.append('description', this.state.post.description);
+    data.append('hashtags', this.state.post.hashtags);
 
     await api.post('posts', data);
 
@@ -78,7 +89,7 @@ export default class New extends Component {
   }
 
   render() {
-    const { preview } = this.state;
+    const { preview, post } = this.state;
     return (
       <View style={ styles.container }>
         <TouchableOpacity
@@ -102,8 +113,8 @@ export default class New extends Component {
           autoCapitalize="none"
           placeholder="Nome do autor"
           placeholderTextColor="#999"
-          value={this.state.author}
-          onChangeText={author => this.setState({ author }) }
+          value={post.author}
+          onChangeText={ newValue => this.handleTextInput('author', newValue) }
         />
 
         <TextInput 
@@ -113,8 +124,8 @@ export default class New extends Component {
           autoCapitalize="none"
           placeholder="Local da foto"
           placeholderTextColor="#999"
-          value={this.state.place}
-          onChangeText={place => this.setState({ place }) }
+          value={post.place}
+          onChangeText={ newValue => this.handleTextInput('place', newValue) }
         />
 
         <TextInput 
@@ -124,8 +135,8 @@ export default class New extends Component {
           autoCapitalize="none"
           placeholder="Descrição"
           placeholderTextColor="#999"
-          value={this.state.description}
-          onChangeText={description => this.setState({ description }) }
+          value={post.description}
+          onChangeText={ newValue => this.handleTextInput('description', newValue) }
         />
 
         <TextInput 
@@ -135,8 +146,8 @@ export default class New extends Component {
           autoCapitalize="none"
           placeholder="Hashtags"
           placeholderTextColor="#999"
-          value={this.state.hashtags}
-          onChangeText={hashtags => this.setState({ hashtags }) }
+          value={post.hashtags}
+          onChangeText={ newValue => this.handleTextInput('hashtags', newValue) }
         />
 
         <TouchableOpacity
